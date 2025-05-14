@@ -1,5 +1,5 @@
 from fastapi import FastAPI, status
-from schemas import UserSchema, UserPublic, UserDB
+from schemas import UserDB, UserPublic, UserSchema
 
 # estânciando da classe FastAPI
 app = FastAPI(title='Curso FastAPI 2024')
@@ -11,14 +11,13 @@ database = []
 def create_user(user: UserSchema): # parametro utilizado para trazer o objeto schema definido
 
     user_with_id = UserDB(
-        id=len(database) + 1,
-        **user.model_dump()
+        id=len(database) + 1, # encrementando em 1 id no banco em memoria
+        **user.model_dump() # (**user desenpacotamento não nomeado) model_dump(Transformando o dado em dicionario)
     )
 
-    database.append(user_with_id)
+    database.append(user_with_id) # fazendo o db recebendo os user criados
 
     return user_with_id
-
 
 
 
