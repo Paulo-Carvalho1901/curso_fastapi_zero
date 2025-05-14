@@ -1,13 +1,5 @@
 from http import HTTPStatus
-from fastapi import status
-from fastapi.testclient import TestClient
 
-import pytest
-from main import app
-
-@pytest.fixture()
-def client():
-    return TestClient(app)
 
 def test_created_user(client):
     response = client.post(
