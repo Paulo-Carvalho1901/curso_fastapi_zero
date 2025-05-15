@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, HTTPException
 from schemas import UserDB, UserPublic, UserSchema, UserList
 
 # estânciando da classe FastAPI
@@ -25,14 +25,22 @@ def read_users():
 
 @app.put('/users/{user_id}', response_model=UserPublic)
 def update_user(user_id: int, user: UserSchema):
+
+    if user_id < 1 or user_id > len(database):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail='User not found'
+        )
+
     user_with_id = UserDB(id=user_id, **user.model_dump())
     database[user_id - 1] = user_with_id
 
     return user_with_id
+
+
+
 
 if __name__ == '__main__':
     import uvicorn
 
     uvicorn.run("main:app", host='127.0.0.1', 
             port=8000, log_level='info', reload=True)
-
