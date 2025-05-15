@@ -36,8 +36,17 @@ def update_user(user_id: int, user: UserSchema):
 
     return user_with_id
 
+@app.delete('/users/{user_id}', response_model=UserPublic)
+def delete_user(user_id : int):
+    if user_id < 1 or user_id > len(database):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail='User not found'
+        )
 
+    user_with_id = database[user_id - 1]
+    del database[user_id - 1]
 
+    return user_with_id
 
 if __name__ == '__main__':
     import uvicorn
