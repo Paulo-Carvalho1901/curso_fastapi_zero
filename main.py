@@ -22,6 +22,13 @@ def create_user(user: UserSchema): # parametro utilizado para trazer o objeto sc
 def read_users():
     return {'users': database}
 
+@app.get('/users/{user_id}', response_model=UserPublic)
+def read_user(user_id: int):
+    for user in database:
+        if user.id == user_id:
+            return user
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
+
 
 @app.put('/users/{user_id}', response_model=UserPublic)
 def update_user(user_id: int, user: UserSchema):
