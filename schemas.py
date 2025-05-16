@@ -1,7 +1,8 @@
 """
-Schemas é 
-
-
+Schemas é fazendo o esquela do banco de dados
+seus contrator seus schemas do banco com suas regras
+uma tabela de banco de dados tem um schema, mas esses schemas 
+não contem dados
 """
 
 from pydantic import BaseModel, EmailStr
