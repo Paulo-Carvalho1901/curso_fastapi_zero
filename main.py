@@ -7,8 +7,9 @@ app = FastAPI(title='Curso FastAPI 2024')
 # Criando um  banco de dados em memória
 database = []
 
-@app.post('/users/', response_model=UserPublic, status_code=status.HTTP_201_CREATED)
-def create_user(user: UserSchema): # parametro utilizado para trazer o objeto schema definido
+# POST CREATE
+@app.post('/users/', response_model=UserPublic, status_code=status.HTTP_201_CREATED) # (saida)
+def create_user(user: UserSchema): # parametro utilizado para trazer o objeto schema definido (entrada)
     user_with_id = UserDB(
         id=len(database) + 1, # encrementando em 1 id no banco em memoria
         **user.model_dump() # (**user desenpacotamento não nomeado) model_dump(Transformando o dado em dicionario)
@@ -17,11 +18,12 @@ def create_user(user: UserSchema): # parametro utilizado para trazer o objeto sc
 
     return user_with_id
 
-
+# GET READ BUSCA TODOS OS USERS DO BANCO
 @app.get('/users/', response_model=UserList)
 def read_users():
     return {'users': database}
 
+# GET READ BUSCA OS USERS PELO ID
 @app.get('/users/{user_id}', response_model=UserPublic)
 def read_user(user_id: int):
     for user in database:
@@ -30,6 +32,7 @@ def read_user(user_id: int):
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
 
 
+# PUT UPDATE ATUALIZANDO ITENS DO BANCO
 @app.put('/users/{user_id}', response_model=UserPublic)
 def update_user(user_id: int, user: UserSchema):
 
@@ -43,6 +46,8 @@ def update_user(user_id: int, user: UserSchema):
 
     return user_with_id
 
+
+# DELETE DELETANDO ITENS DO BANCO
 @app.delete('/users/{user_id}', response_model=Message)
 def delete_user(user_id : int):
     if user_id < 1 or user_id > len(database):
